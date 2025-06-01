@@ -8,9 +8,9 @@ const colors = [
 
 // Crear fuego artificial en posición específica
 function createFirework(x, y) {
-    const particleCount = 100 + Math.floor(Math.random() * 50);
+    const particleCount = 50 + Math.floor(Math.random() * 30); // Menos partículas
     const angleIncrement = (Math.PI * 2) / particleCount;
-    const power = 5 + Math.random() * 5;
+    const power = 3 + Math.random() * 3; // Menor potencia
     const color = colors[Math.floor(Math.random() * colors.length)];
 
     // Crear explosión central
@@ -19,7 +19,7 @@ function createFirework(x, y) {
     explosion.style.left = `${x}px`;
     explosion.style.top = `${y}px`;
     explosion.style.backgroundColor = color;
-    explosion.style.boxShadow = `0 0 20px 5px ${color}`;
+    explosion.style.boxShadow = `0 0 10px 2px ${color}`; // Efecto más pequeño
     document.body.appendChild(explosion);
 
     // Crear partículas
@@ -30,7 +30,7 @@ function createFirework(x, y) {
         // Velocidad y dirección
         const angle = angleIncrement * i;
         const velocity = power * 0.5 + Math.random() * power;
-        const lifetime = 1000 + Math.random() * 1000;
+        const lifetime = 800 + Math.random() * 800; // Menor duración
 
         // Estilos iniciales
         particle.style.left = `${x}px`;
@@ -38,12 +38,12 @@ function createFirework(x, y) {
         particle.style.backgroundColor = color;
 
         // Variación de color para algunas partículas
-        if (Math.random() > 0.7) {
+        if (Math.random() > 0.8) { // Menos variación de color
             particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         }
 
-        // Tamaño aleatorio
-        const size = 2 + Math.random() * 4;
+        // Tamaño aleatorio (más pequeño)
+        const size = 1 + Math.random() * 3;
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
 
@@ -65,8 +65,8 @@ function animateParticle(particle, angle, velocity, lifetime) {
     const startX = parseFloat(particle.style.left);
     const startY = parseFloat(particle.style.top);
 
-    // Gravedad
-    const gravity = 0.05;
+    // Gravedad (menor)
+    const gravity = 0.03;
     let velocityX = Math.cos(angle) * velocity;
     let velocityY = Math.sin(angle) * velocity;
 
@@ -84,7 +84,7 @@ function animateParticle(particle, angle, velocity, lifetime) {
 
         // Actualizar posición
         const x = startX + velocityX * elapsed * 0.05;
-        const y = startY + velocityY * elapsed * 0.05 + gravity * elapsed * elapsed * 0.0005;
+        const y = startY + velocityY * elapsed * 0.05 + gravity * elapsed * elapsed * 0.0003;
 
         particle.style.left = `${x}px`;
         particle.style.top = `${y}px`;
@@ -102,28 +102,17 @@ function autoFire() {
     const y = Math.random() * window.innerHeight * 0.6;
     createFirework(x, y);
 
-    // Tiempo aleatorio para el próximo fuego artificial
-    const delay = 500 + Math.random() * 1500;
+    // Tiempo más largo entre fuegos artificiales
+    const delay = 2000 + Math.random() * 3000;
     setTimeout(autoFire, delay);
 }
 
 // Iniciar fuegos artificiales automáticos
 window.onload = function () {
-    // Comenzar con varios fuegos artificiales
-    for (let i = 0; i < 3; i++) {
+    // Comenzar con menos fuegos artificiales iniciales
+    for (let i = 0; i < 2; i++) {
         setTimeout(() => {
             autoFire();
-        }, i * 300);
+        }, i * 500);
     }
-
-    // Disparar con clic del mouse
-    document.addEventListener('click', function (e) {
-        createFirework(e.clientX, e.clientY);
-    });
-
-    // Disparar con toque en dispositivos móviles
-    document.addEventListener('touchstart', function (e) {
-        e.preventDefault();
-        createFirework(e.touches[0].clientX, e.touches[0].clientY);
-    });
 };
